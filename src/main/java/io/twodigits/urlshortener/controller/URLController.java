@@ -28,18 +28,27 @@ public class URLController {
         this.statisticsRepository = statisticsRepository;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/urlcreator/{id}")
     public RedirectView alias ( @PathVariable String id, HttpServletRequest request) {
-        log.debug("Your alias is: {}", id);
-        Optional <URL> url = urlShortenerService.getURL(id);
+
         RedirectView redirectView = new RedirectView();
-        if (url.isEmpty()) {
-            return redirectView;
+        try {
+            log.debug("Your alias is: {}", id);
+            Optional <URL> url = urlShortenerService.getURL(id);
+
+            if (url.isEmpty()) {
+                return redirectView;
+            }
+            String alias = url.get().getURL();
+            log.debug("Redirecting alias to: {}", alias);
+            redirectView.setUrl(alias);
+            updateStatistics(url.get(), request);
         }
-        String alias = url.get().getURL();
-        log.debug("Redirecting alias to: {}", alias);
-        redirectView.setUrl(alias);
-        updateStatistics(url.get(), request);
+
+        catch(Exception exc) {
+            System.out.println ("Exception ocurred!!!");
+        }
+
         return redirectView;
     }
 
