@@ -26,7 +26,7 @@ public class URLShortenerServiceImpl implements URLShortenerService {
         alias.setUser(user);
         alias.setUrl(url);
         alias.setId(id);
-        return repository.save(alias);
+        return repository.save(alias); // storing to the database: in this case, the H2 in-memory database
 
     }
 

@@ -12,7 +12,8 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/url-alias")
+@RequestMapping(path = "/url-alias") // goes to th 1st method: createUrl. url object contains id,
+// which does bo have to be passed in the body: need to pass only id and username
 public class RedirectURLController {
     private final Logger log = LoggerFactory.getLogger(RedirectURLController.class);
     private final URLShortenerService urlShortenerService;
@@ -29,13 +30,15 @@ public class RedirectURLController {
     @PostMapping
     public ResponseEntity<URL> createUrl(@RequestBody URL url) throws URISyntaxException {
         log.debug("REST request to save url : {}", url);
-        if (url.getId() != null) {
+        if (url.getId() != null) { // validation whether url id is empty
             return ResponseEntity.badRequest().build();
         }
+        // if not null, return ResponseEntity object
         return ResponseEntity.ok(urlShortenerService.addURL(url.getUser(), url.getURL()));
     }
 
     // Create new alias
+    // response method
     @GetMapping
     public ResponseEntity<Iterable<URL>> getAllUrl(@RequestParam String user) {
         if (!StringUtils.hasText(user)) {
@@ -49,7 +52,7 @@ public class RedirectURLController {
     public ResponseEntity<URL> getURLId ( @PathVariable String id) {
         log.debug("REST request to get Url : {}", id);
         if (!StringUtils.hasText(id)) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build(); // trying to get record from the data to see whether already exists or not
         }
         Optional<URL> urlOptional = urlShortenerService.getURL(id);
         return wrapOrNotFoundResponse(urlOptional);
@@ -78,7 +81,9 @@ public class RedirectURLController {
         if (url.getId() == null) {
             return ResponseEntity.badRequest().build();
         }
+        // when delete() method is called - delete must also be selected in Postman
         urlShortenerService.deleteURL(url.getUser(), url.getId());
+        // passing the url
         return ResponseEntity.noContent().build();
     }
 }
