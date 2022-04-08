@@ -40,3 +40,35 @@ java -jar target/url-shortener.jar
 
 After a few seconds the application should have started successfully. You can access the Web Service endpoints via
 [http://localhost:8080](http://localhost:8080) now.
+
+post request: 
+http://localhost:8080/url-alias
+
+post request body:
+{
+    "url": "https://www.google.com",
+    "user": "Marco"
+}
+
+post answer: 
+{
+    "id": "23ac8f7b65bce49bdd0a9a24bebeb4d347a839153315c01cbc8a7bf6f0c8f083",
+    "url": "https://www.google.com",
+    "user": "Marco",
+    "statistics": null
+}
+
+get request: 
+http://localhost:8080/urlcreator/23ac8f7b65bce49bdd0a9a24bebeb4d347a839153315c01cbc8a7bf6f0c8f083
+
+get answer: 
+{
+    "id": "23ac8f7b65bce49bdd0a9a24bebeb4d347a839153315c01cbc8a7bf6f0c8f083",
+    "url": "https://www.google.com",
+    "user": "Marco",
+    "statistics": null
+}
+
+check in web: 
+http://localhost:8080/urlcreator/23ac8f7b65bce49bdd0a9a24bebeb4d347a839153315c01cbc8a7bf6f0c8f083
+redirects to google.com
